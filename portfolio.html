@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio — LolaLuxExperience</title>
+<link rel="stylesheet" href="styles.css">
+<!-- Font Awesome for social icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html">LolaLuxExperience</a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a class="active" href="portfolio.html">Portfolio</a>
+      <a href="about.html">About</a>
+      <a class="btn-cta" href="book.html">Book Appointment</a>
+    </nav>
+    <button id="navToggle" class="nav-toggle" aria-label="Toggle nav">☰</button>
+  </div>
+</header>
+
+<main class="container">
+<section class="section-header fade-in">
+  <h1>Our Portfolio</h1>
+  <p>Luxury weddings, corporate events, and exclusive celebrations.</p>
+</section>
+
+<section class="portfolio-grid fade-in">
+  <div class="portfolio-item">
+    <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3" alt="Luxury Wedding 1">
+  </div>
+  <div class="portfolio-item">
+    <img src="https://images.unsplash.com/photo-1505236858219-8359eb29e329" alt="Luxury Wedding 2">
+  </div>
+  <div class="portfolio-item">
+    <img src="https://images.unsplash.com/photo-1478146896981-b80fe463b330" alt="Corporate Gala">
+  </div>
+  <div class="portfolio-item">
+    <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3" alt="Private Event">
+  </div>
+  <div class="portfolio-item">
+    <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622" alt="Themed Event">
+  </div>
+  <div class="portfolio-item">
+    <img src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce" alt="Luxury Celebration">
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox">
+  <span class="lightbox-close">&times;</span>
+  <img class="lightbox-img" src="" alt="">
+  <div class="lightbox-controls">
+    <span class="prev">&#10094;</span>
+    <span class="next">&#10095;</span>
+  </div>
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <p>© <span id="year"></span> LolaLuxExperience</p>
+    <nav class="footer-nav">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+    </nav>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/yourusername" target="_blank" rel="noopener" class="social-link">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://www.tiktok.com/@yourusername" target="_blank" rel="noopener" class="social-link">
+        <i class="fab fa-tiktok"></i>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js" defer></script>
+</body>
+</html>
