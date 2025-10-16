@@ -1,101 +1,87 @@
-// Mobile nav toggle
-const navToggle = document.getElementById('navToggle');
-const nav = document.querySelector('.nav');
-navToggle?.addEventListener('click', () => nav.classList.toggle('active'));
-
-// Set current year
 document.addEventListener('DOMContentLoaded', () => {
-  const y = new Date().getFullYear();
-  const el = document.getElementById('year');
-  if(el) el.textContent = y;
-});
+  // Utility selectors
+  const q = (selector) => document.querySelector(selector);
+  const qa = (selector) => document.querySelectorAll(selector);
 
-// EmailJS setup
-const serviceID = 'service_j6kud69';
-const templateID = 'template_uu3ekge';
-const publicKey = 'ySovE-RPs6UgJTE3u';
-
-window.initEmailJS = function(){
-  try{
-    if(window.emailjs){
-      emailjs.init(publicKey);
-    }
-  } catch(e){console.warn('EmailJS init failed', e);}
-}
-
-if(window.emailjs){initEmailJS();}
-else{window.addEventListener('emailjs.loaded', initEmailJS);}
-
-// Booking form submit
-const bookingForm = document.getElementById('bookingForm');
-if(bookingForm){
-  bookingForm.addEventListener('submit', (e)=>{
-    e.preventDefault();
-    const data = {
-      fullname: bookingForm.fullname.value.trim(),
-      phone: bookingForm.phone.value.trim(),
-      email: bookingForm.email.value.trim(),
-      service: bookingForm.service.value,
-      date: bookingForm.date.value,
-      time: bookingForm.time.value,
-      notes: bookingForm.notes.value.trim()
-    };
-    if(!data.fullname || !data.phone || !data.email || !data.service || !data.date || !data.time){
-      alert('Please complete all required fields.');
-      return;
-    }
-    const templateParams = {
-      to_name: 'LolaLux',
-      from_name: data.fullname,
-      from_email: data.email,
-      phone: data.phone,
-      service: data.service,
-      date: data.date,
-      time: data.time,
-      notes: data.notes
-    };
-    if(window.emailjs && serviceID && templateID){
-      emailjs.send(serviceID, templateID, templateParams)
-        .then(()=>{
-          alert('Booking request sent! We will contact you shortly.');
-          bookingForm.reset();
-        }, (err)=>{
-          console.error('EmailJS error:', err);
-          alert('Error sending request. Try again or email hello@lolaluxexperience.com');
-        });
-    } else { alert('EmailJS credentials missing.'); }
+  // Mobile navigation toggle
+  const navToggle = q('#navToggle');
+  const mainNav = q('.nav');
+  navToggle?.addEventListener('click', () => {
+    mainNav.style.display = mainNav.style.display === 'flex' ? '' : 'flex';
   });
-}
 
-// Lightbox for portfolio
-const lightbox = document.getElementById('lightbox');
-const lightboxImg = document.querySelector('.lightbox-img');
-const lightboxClose = document.querySelector('.lightbox-close');
-const prevBtn = document.querySelector('.prev');
-const nextBtn = document.querySelector('.next');
+  // Lightbox functionality for portfolio
+  const lightbox = q('#lightbox');
+  const lightboxImg = q('.lightbox-img');
+  const lightboxClose = q('.lightbox-close');
+  const portfolioItems = qa('.portfolio-item');
 
-let currentIndex = 0;
-const portfolioItems = document.querySelectorAll('.portfolio-item img');
-const images = Array.from(portfolioItems).map(img=>img.src);
+  portfolioItems.forEach(item => {
+    const openLightbox = () => {
+      const src = item.querySelector('img').src;
+      if (lightbox && lightboxImg) {
+        lightboxImg.src = src;
+        lightbox.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+    };
+    item.addEventListener('click', openLightbox);
+    item.addEventListener('keydown', (e) => { if (e.key === 'Enter') openLightbox(); });
+  });
 
-function openLightbox(index){
-  currentIndex = index;
-  lightboxImg.src = images[currentIndex];
-  lightbox.style.display = 'flex';
-}
-function closeLightbox(){ lightbox.style.display = 'none'; }
-function showNext(){ currentIndex=(currentIndex+1)%images.length; lightboxImg.src=images[currentIndex]; }
-function showPrev(){ currentIndex=(currentIndex-1+images.length)%images.length; lightboxImg.src=images[currentIndex]; }
+  const closeLightbox = () => {
+    if (lightbox) {
+      lightbox.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+  };
 
-portfolioItems.forEach((img, idx)=>{ img.addEventListener('click', ()=>openLightbox(idx)); });
-lightboxClose.addEventListener('click', closeLightbox);
-nextBtn.addEventListener('click', showNext);
-prevBtn.addEventListener('click', showPrev);
-lightbox.addEventListener('click', e=>{ if(e.target===lightbox) closeLightbox(); });
-document.addEventListener('keydown', e=>{
-  if(lightbox.style.display==='flex'){
-    if(e.key==='ArrowRight') showNext();
-    if(e.key==='ArrowLeft') showPrev();
-    if(e.key==='Escape') closeLightbox();
+  lightboxClose?.addEventListener('click', closeLightbox);
+  lightbox?.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+
+  // Booking form submit with EmailJS
+  const bookingForm = q('#bookingForm');
+  bookingForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    // --- IMPORTANT: Replace with your actual EmailJS details ---
+    const serviceID = 'service_j6kud69';
+    const templateID = 'template_uu3ekge';
+    const userID = 'ySovE-RPs6UgJTE3u';
+    // ---------------------------------------------------------
+
+    emailjs.sendForm(serviceID, templateID, bookingForm, userID)
+      .then(() => {
+        alert('Thank you! Your booking request has been sent successfully. We will contact you shortly.');
+        bookingForm.reset();
+      }, (err) => {
+        alert('Oops! Something went wrong. Please try again.\n' + JSON.stringify(err));
+      });
+  });
+
+  // Footer year
+  const yearSpan = q('#year');
+  if (yearSpan) {
+    yearSpan.textContent = new Date().getFullYear();
   }
+
+  // Smooth scrolling for internal links (if you add any)
+  qa('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      const href = anchor.getAttribute('href');
+      if (href.length > 1 && q(href)) {
+        e.preventDefault();
+        q(href).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // close mobile nav when clicking a link
+        if (window.innerWidth < 768 && mainNav) mainNav.style.display = '';
+      }
+    });
+  });
+
+  // Accessibility: close lightbox with Escape key
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lightbox && lightbox.style.display === 'flex') {
+      closeLightbox();
+    }
+  });
 });
